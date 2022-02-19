@@ -1,7 +1,7 @@
 from suds.client import Client
 from suds.sax.element import Element
 import logging
-from config import DARWIN_WEBSERVICE_NAMESPACE, DARWIN_TOKEN, LDBWS_URL
+from config.national_rail import DARWIN_WEBSERVICE_NAMESPACE, DARWIN_TOKEN, LDBWS_URL
 from util import retry
 import datetime
 import pytz
