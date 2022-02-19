@@ -1,7 +1,5 @@
-from suds.client import Client
-from suds.sax.element import Element
 import logging
-from config.api import getNationalRailDarwinConfig, getLDBWSConfig
+from config.api import getNationalRailClient
 from util import retry, runForever
 import datetime
 import pytz
@@ -12,17 +10,7 @@ class NationalRailQuery(object):
     def __init__(self, services):
         self._services = services
         self._serviceTimeframe = 1800
-
-    def _setupNationalRailClient(self):
-        logging.info("Setting up national rail client")
-        ns, token = getNationalRailDarwinConfig()
-        tokenElement = Element("AccessToken", ns=ns)
-        tokenVal = Element("TokenValue", ns=ns)
-        tokenVal.setText(token)
-        tokenElement.append(tokenVal)
-        client = Client(getLDBWSConfig())
-        client.set_options(soapheaders=token)
-        self.nationalRailClient = client
+        self.nationalRailClient = getNationalRailClient()
 
     def _getDesiredServiceFromDepartureBoard(self, service):
         @retry(self._setupNationalRailClient)
