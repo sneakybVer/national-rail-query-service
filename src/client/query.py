@@ -4,6 +4,12 @@ from src.client.util import retry, runForever
 import datetime
 import pytz
 import time
+from src.client.train_service import (
+    TrainServiceUpdate,
+    TrainServiceCancellationData,
+    TrainServiceDelayData,
+    TrainServiceOnTimeData,
+)
 
 
 class NationalRailQuery(object):
@@ -37,14 +43,36 @@ class NationalRailQuery(object):
             if service.isWithinTimeframe(self._serviceTimeframe)
         ]
 
-    def _publishServiceData(self, service):
-        data = self._getDesiredServiceFromDepartureBoard(service)
-        # Log data for now during testing
-        logging.info("Service data found: %s", data)
+    def _parseServiceData(self, serviceToMonitor, serviceData):
+        if serviceData.etd == "Cancelled":
+            data = TrainServiceCancellationData(cancelReason=serviceData.cancelReason)
+        elif serviceData.etd == "On time":
+            data = TrainServiceOnTimeData()
+        elif serviceData.etd == "Delayed":
+            data = TrainServiceDelayData(None, serviceData.delayReason)
+        else:
+            etd = datetime.datetime.strptime(serviceData.etd, "%H:%M")
+            delay = etd - serviceToMonitor.scheduledTime
+            if delay.seconds > (180):
+                data = TrainServiceDelayData(delay.seconds, serviceData.delayReason)
+            else:
+                data = TrainServiceOnTimeData()
+
+        update = TrainServiceUpdate(
+            serviceData.std,
+            serviceData.etd,
+            serviceToMonitor.station,
+            serviceToMonitor.destination,
+            data,
+        )
+        return update
 
     def _queryServices(self):
-        for service in self._getServicesToMonitor():
-            self._publishServiceData(service)
+        ret = []
+        for serviceToMonitor in self._getServicesToMonitor():
+            serviceData = self._getDesiredServiceFromDepartureBoard(serviceToMonitor)
+            ret.append(self._parseServiceData(serviceToMonitor, serviceData))
+        return ret
 
     def queryServices(self):
         runForever(self._queryServices, self.interval)

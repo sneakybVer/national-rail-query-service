@@ -9,7 +9,7 @@ def getNationalRailDarwinConfig():
     return DARWIN_WEBSERVICE_NAMESPACE, DARWIN_TOKEN
 
 
-def getLDBWSConfig():
+def getLDBWSURL():
     from src.config.national_rail import LDBWS_URL
 
     return LDBWS_URL
@@ -22,5 +22,6 @@ def getNationalRailClient():
     tokenVal = Element("TokenValue", ns=ns)
     tokenVal.setText(token)
     tokenElement.append(tokenVal)
-    client = Client(getLDBWSConfig())
-    client.set_options(soapheaders=token)
+    client = Client(getLDBWSURL())
+    client.set_options(soapheaders=tokenElement)
+    return client
