@@ -84,7 +84,7 @@ class NationalRailQuery(object):
             if serviceData:
                 parsedUpdate = self._parseServiceData(serviceToMonitor, serviceData)
                 logging.info(
-                    "NationalRailQuery]: Parsed service update: %s",
+                    "[NationalRailQuery]: Parsed service update: %s",
                     parsedUpdate.printInfo(),
                 )
                 ret.append(parsedUpdate)
