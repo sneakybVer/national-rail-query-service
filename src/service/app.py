@@ -22,12 +22,14 @@ def _runApp(query, publisher):
 # For dev testing purposes hardcode the services here
 from src.client.train_service import TrainServiceMonitorInstruction
 
-TEST_SERVICES = [TrainServiceMonitorInstruction("22:47", "SVG", "LBG")]
-TEST_TIMEFRAME = 86400
+TEST_SERVICES = [
+    TrainServiceMonitorInstruction("08:02", "SVG", "LBG"),
+    TrainServiceMonitorInstruction("08:17", "SVG", "LBG"),
+]
 
 
 def devTestApp():
-    query = NationalRailQuery(TEST_SERVICES, serviceTimeframe=TEST_TIMEFRAME)
+    query = NationalRailQuery(TEST_SERVICES)
     publisher = TrainServiceUpdatePublisher()
     _runApp(query, publisher)
 
