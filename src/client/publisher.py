@@ -1,3 +1,7 @@
+import logging
+
+
 class TrainServiceUpdatePublisher(object):
     def publishUpdates(self, updates):
-        pass
+        for update in updates:
+            logging.info("%s", update.printInfo())

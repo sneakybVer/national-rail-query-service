@@ -70,6 +70,10 @@ class NationalRailQuery(object):
     def queryServices(self):
         ret = []
         for serviceToMonitor in self._getServicesToMonitor():
+            logging.info("Querying for service: %s", serviceToMonitor.printInfo())
             serviceData = self._getDesiredServiceFromDepartureBoard(serviceToMonitor)
-            ret.append(self._parseServiceData(serviceToMonitor, serviceData))
+            if serviceData:
+                parsedUpdate = self._parseServiceData(serviceToMonitor, serviceData)
+                logging.info("Parsed service update: %s", parsedUpdate.printInfo())
+                ret.append(parsedUpdate)
         return ret
