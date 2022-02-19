@@ -13,9 +13,9 @@ from src.client.train_service import (
 
 
 class NationalRailQuery(object):
-    def __init__(self, services):
+    def __init__(self, services, serviceTimeframe=1800):
         self._services = services
-        self._serviceTimeframe = 1800
+        self._serviceTimeframe = serviceTimeframe
         self._setupNationalRailClient()
 
     def _setupNationalRailClient(self):
