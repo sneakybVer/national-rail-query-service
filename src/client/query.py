@@ -1,7 +1,7 @@
 from suds.client import Client
 from suds.sax.element import Element
 import logging
-from config.national_rail import DARWIN_WEBSERVICE_NAMESPACE, DARWIN_TOKEN, LDBWS_URL
+from config.api import getNationalRailDarwinConfig, getLDBWSConfig
 from util import retry
 import datetime
 import pytz
@@ -15,11 +15,12 @@ class NationalRailQuery(object):
 
     def _setupNationalRailClient(self):
         logging.info("Setting up national rail client")
-        token = Element("AccessToken", ns=DARWIN_WEBSERVICE_NAMESPACE)
-        val = Element("TokenValue", ns=DARWIN_WEBSERVICE_NAMESPACE)
-        val.setText(DARWIN_TOKEN)
-        token.append(val)
-        client = Client(LDBWS_URL)
+        ns, token = getNationalRailDarwinConfig()
+        tokenElement = Element("AccessToken", ns=ns)
+        tokenVal = Element("TokenValue", ns=ns)
+        tokenVal.setText(token)
+        tokenElement.append(tokenVal)
+        client = Client(getLDBWSConfig())
         client.set_options(soapheaders=token)
         self.nationalRailClient = client
 
