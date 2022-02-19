@@ -10,6 +10,12 @@ def _runApp(query, publisher):
         time.sleep(1)
 
 
+def run():
+    query = NationalRailQuery([])
+    publisher = TrainServiceUpdatePublisher()
+    _runApp(query, publisher)
+
+
 # For dev testing purposes hardcode the services here
 from src.client.train_service import TrainServiceMonitorInstruction
 
