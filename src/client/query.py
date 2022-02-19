@@ -10,6 +10,9 @@ class NationalRailQuery(object):
     def __init__(self, services):
         self._services = services
         self._serviceTimeframe = 1800
+        self._setupNationalRailClient()
+
+    def _setupNationalRailClient(self):
         self.nationalRailClient = getNationalRailClient()
 
     def _getDesiredServiceFromDepartureBoard(self, service):
