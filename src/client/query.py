@@ -67,12 +67,9 @@ class NationalRailQuery(object):
         )
         return update
 
-    def _queryServices(self):
+    def queryServices(self):
         ret = []
         for serviceToMonitor in self._getServicesToMonitor():
             serviceData = self._getDesiredServiceFromDepartureBoard(serviceToMonitor)
             ret.append(self._parseServiceData(serviceToMonitor, serviceData))
         return ret
-
-    def queryServices(self):
-        runForever(self._queryServices, self.interval)

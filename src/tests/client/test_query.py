@@ -83,7 +83,7 @@ class TestNationalRailQuery(unittest.TestCase):
             self._setUpOnTimeService("08:42", "KGX")
         )
 
-        results = self.testClient._queryServices()
+        results = self.testClient.queryServices()
         self.nationalRailMock.service.GetDepBoardWithDetails.assert_called_once()
 
         self.assertEqual(len(results), 1)
@@ -93,7 +93,7 @@ class TestNationalRailQuery(unittest.TestCase):
         self.nationalRailMock.service.GetDepBoardWithDetails.return_value = (
             self._setUpDelayedService("08:42", "KGX")
         )
-        results = self.testClient._queryServices()
+        results = self.testClient.queryServices()
         self.nationalRailMock.service.GetDepBoardWithDetails.assert_called_once()
 
         self.assertEqual(len(results), 1)
