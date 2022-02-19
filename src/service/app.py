@@ -15,7 +15,7 @@ def _runApp(query, publisher):
     while 1:
         updates = query.queryServices()
         publisher.publishUpdates(updates)
-        time.sleep(30)
+        time.sleep(300)
 
 
 # For dev testing purposes hardcode the services here
