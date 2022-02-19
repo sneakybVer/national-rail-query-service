@@ -33,6 +33,12 @@ class NationalRailQuery(object):
                         for serviceLocation in serviceItem.destination.location:
                             if serviceLocation.crs == service.destination:
                                 return serviceItem
+                        for (
+                            callingPointList
+                        ) in serviceItem.subsequentCallingPoints.callingPointList:
+                            for callingPoint in callingPointList.callingPoint:
+                                if callingPoint.crs == service.destination:
+                                    return serviceItem
 
         return _queryNationalRail()
 

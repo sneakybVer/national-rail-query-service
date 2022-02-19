@@ -14,11 +14,14 @@ class MockNationalRailTrainServices(object):
 
 
 class MockNationalRailTrainService(object):
-    def __init__(self, std, destination, etd, delayReason=None):
+    def __init__(
+        self, std, destination, etd, delayReason=None, subsequentCallingPoints=None
+    ):
         self.std = std
         self.destination = destination
         self.etd = etd
         self.delayReason = delayReason
+        self.subsequentCallingPoints = subsequentCallingPoints
 
 
 class MockNationalRailDestination(object):
@@ -26,12 +29,27 @@ class MockNationalRailDestination(object):
         self.location = location
 
 
+class MockNationalRailSubsequentCallingPoints(object):
+    def __init__(self, callingPointList):
+        self.callingPointList = [callingPointList]
+
+
+class MockNationalRailCallingPointList(object):
+    def __init__(self, callingPoint):
+        self.callingPoint = callingPoint
+
+
+class MockNationalRailCallingPoint(object):
+    def __init__(self, crs):
+        self.crs = crs
+
+
 class MockNationalRailLocation(object):
     def __init__(self, crs):
         self.crs = crs
 
 
-def setUpOnTimeService(std, destination):
+def setUpOnTimeService(std, destination=None, callingPoint=None):
     return MockNationalRailResponse(
         MockNationalRailTrainServices(
             [
@@ -41,13 +59,18 @@ def setUpOnTimeService(std, destination):
                         [MockNationalRailLocation(destination)]
                     ),
                     std,
+                    subsequentCallingPoints=MockNationalRailSubsequentCallingPoints(
+                        MockNationalRailCallingPointList(
+                            [MockNationalRailCallingPoint(callingPoint)]
+                        )
+                    ),
                 )
             ]
         ),
     )
 
 
-def setUpDelayedService(std, destination):
+def setUpDelayedService(std, destination=None, callingPoint=None):
     return MockNationalRailResponse(
         MockNationalRailTrainServices(
             [
@@ -61,6 +84,11 @@ def setUpDelayedService(std, destination):
                         + datetime.timedelta(seconds=2000)
                     ).strftime("%H:%M"),
                     delayReason="Slight breeze",
+                    subsequentCallingPoints=MockNationalRailSubsequentCallingPoints(
+                        MockNationalRailCallingPointList(
+                            [MockNationalRailCallingPoint(callingPoint)]
+                        )
+                    ),
                 )
             ]
         ),

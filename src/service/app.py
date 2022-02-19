@@ -21,7 +21,7 @@ def _runApp(query, publisher):
 # For dev testing purposes hardcode the services here
 from src.client.train_service import TrainServiceMonitorInstruction
 
-TEST_SERVICES = [TrainServiceMonitorInstruction("08:02", "SVG", "LBG")]
+TEST_SERVICES = [TrainServiceMonitorInstruction("22:47", "SVG", "LBG")]
 TEST_TIMEFRAME = 86400
 
 

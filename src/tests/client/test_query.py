@@ -46,6 +46,18 @@ class TestNationalRailQuery(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].stateData.state(), TrainServiceState.ON_TIME.value)
 
+    def test__queryServices_callingPoint(self):
+        # Setup a service which finishes in Horsham but calls at Kings Cross
+        self.nationalRailMock.service.GetDepBoardWithDetails.return_value = (
+            setUpOnTimeService("08:42", "HRH", "KGX")
+        )
+
+        results = self.testClient.queryServices()
+        self.nationalRailMock.service.GetDepBoardWithDetails.assert_called_once()
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].stateData.state(), TrainServiceState.ON_TIME.value)
+
     def test_delayedService(self):
         self.nationalRailMock.service.GetDepBoardWithDetails.return_value = (
             setUpDelayedService("08:42", "KGX")
