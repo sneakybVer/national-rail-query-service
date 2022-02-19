@@ -2,7 +2,7 @@ import logging
 import time
 
 
-def retry(callback, default=None, tries=2):
+def retry(callback, tries=2):
     def retryDecorator(fn):
         def funcWrapper(*args, **kwargs):
             for i in range(tries):
@@ -15,7 +15,8 @@ def retry(callback, default=None, tries=2):
                     )
                     callback()
                     logging.info("retrying {} after error".format(fn.__name__))
-            return default
+            else:
+                raise RuntimeError("Retries exceeded, see log for errors")
 
         return funcWrapper
 

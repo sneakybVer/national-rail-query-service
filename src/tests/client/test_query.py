@@ -3,34 +3,25 @@ from src.client.query import NationalRailQuery
 from src.client.train_service import TrainServiceMonitorInstruction, TrainServiceState
 import mock
 import datetime
+from src.tests.client.national_rail_data import setUpDelayedService, setUpOnTimeService
 
 
-class MockNationalRailResponse(object):
-    def __init__(self, trainServices):
-        self.trainServices = trainServices
+class TestNationalRailQueryNonFunctionals(unittest.TestCase):
+    def test_failedConnection(self):
+        nationalRailMock = mock.MagicMock()
+        with mock.patch(
+            "src.client.query.getNationalRailClient", return_value=nationalRailMock
+        ) as getClientMock:
+            testQuery = NationalRailQuery([])
+            getClientMock.assert_called_once()
 
+            getClientMock.service.GetDepBoardWithDetails.side_effect = RuntimeError()
 
-class MockNationalRailTrainServices(object):
-    def __init__(self, service):
-        self.service = service
+            with self.assertRaisesRegexp(RuntimeError, "Retries exceeded"):
+                testQuery._getDesiredServiceFromDepartureBoard(None)
 
-
-class MockNationalRailTrainService(object):
-    def __init__(self, std, destination, etd, delayReason=None):
-        self.std = std
-        self.destination = destination
-        self.etd = etd
-        self.delayReason = delayReason
-
-
-class MockNationalRailDestination(object):
-    def __init__(self, location):
-        self.location = location
-
-
-class MockNationalRailLocation(object):
-    def __init__(self, crs):
-        self.crs = crs
+            # we retry twice then fail
+            self.assertEqual(getClientMock.call_count, 3)
 
 
 class TestNationalRailQuery(unittest.TestCase):
@@ -44,43 +35,9 @@ class TestNationalRailQuery(unittest.TestCase):
         testService1.isWithinTimeframe = lambda *args, **kwargs: True
         self.testClient = NationalRailQuery([testService1])
 
-    def _setUpOnTimeService(self, std, destination):
-        return MockNationalRailResponse(
-            MockNationalRailTrainServices(
-                [
-                    MockNationalRailTrainService(
-                        std,
-                        MockNationalRailDestination(
-                            [MockNationalRailLocation(destination)]
-                        ),
-                        std,
-                    )
-                ]
-            ),
-        )
-
-    def _setUpDelayedService(self, std, destination):
-        return MockNationalRailResponse(
-            MockNationalRailTrainServices(
-                [
-                    MockNationalRailTrainService(
-                        std,
-                        MockNationalRailDestination(
-                            [MockNationalRailLocation(destination)]
-                        ),
-                        (
-                            datetime.datetime.strptime(std, "%H:%M")
-                            + datetime.timedelta(seconds=2000)
-                        ).strftime("%H:%M"),
-                        delayReason="Slight breeze",
-                    )
-                ]
-            ),
-        )
-
     def test__queryServices(self):
         self.nationalRailMock.service.GetDepBoardWithDetails.return_value = (
-            self._setUpOnTimeService("08:42", "KGX")
+            setUpOnTimeService("08:42", "KGX")
         )
 
         results = self.testClient.queryServices()
@@ -91,7 +48,7 @@ class TestNationalRailQuery(unittest.TestCase):
 
     def test_delayedService(self):
         self.nationalRailMock.service.GetDepBoardWithDetails.return_value = (
-            self._setUpDelayedService("08:42", "KGX")
+            setUpDelayedService("08:42", "KGX")
         )
         results = self.testClient.queryServices()
         self.nationalRailMock.service.GetDepBoardWithDetails.assert_called_once()

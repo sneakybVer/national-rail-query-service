@@ -1,6 +1,6 @@
 import logging
 from src.config.api import getNationalRailClient
-from src.client.util import retry, runForever
+from src.client.util import retry
 import datetime
 import pytz
 import time
