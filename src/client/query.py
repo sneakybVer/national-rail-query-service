@@ -2,7 +2,7 @@ from suds.client import Client
 from suds.sax.element import Element
 import logging
 from config.api import getNationalRailDarwinConfig, getLDBWSConfig
-from util import retry
+from util import retry, runForever
 import datetime
 import pytz
 import time
@@ -51,8 +51,9 @@ class NationalRailQuery(object):
         # Log data for now during testing
         logging.info("Service data found: %s", data)
 
+    def _queryServices(self):
+        for service in self._getServicesToMonitor():
+            self._publishServiceData(service)
+
     def queryServices(self):
-        while 1:
-            for service in self._getServicesToMonitor():
-                self._publishServiceData(service)
-            time.sleep(self.interval)
+        runForever(self._queryServices, self.interval)

@@ -1,4 +1,5 @@
 import logging
+import time
 
 
 def retry(callback, default=None, tries=2):
@@ -19,3 +20,9 @@ def retry(callback, default=None, tries=2):
         return funcWrapper
 
     return retryDecorator
+
+
+def runForever(fn, sleep):
+    while 1:
+        fn()
+        time.sleep(sleep)
