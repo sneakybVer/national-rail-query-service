@@ -2,8 +2,6 @@ import logging
 from src.config.api import getNationalRailClient
 from src.client.util import retry
 import datetime
-import pytz
-import time
 from src.client.train_service import (
     TrainServiceUpdate,
     TrainServiceCancellationData,
