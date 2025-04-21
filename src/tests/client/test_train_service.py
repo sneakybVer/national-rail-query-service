@@ -1,4 +1,3 @@
-from imghdr import tests
 import unittest
 from src.client.train_service import (
     TrainServiceMonitorInstruction,
