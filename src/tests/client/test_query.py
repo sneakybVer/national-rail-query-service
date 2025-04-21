@@ -2,8 +2,7 @@ import unittest
 from src.client.query import NationalRailQuery
 from src.client.train_service import TrainServiceMonitorInstruction, TrainServiceState
 import mock
-import datetime
-from src.tests.client.national_rail_data import setUpDelayedService, setUpOnTimeService
+from tests.client.national_rail_data import setUpDelayedService, setUpOnTimeService
 
 
 class TestNationalRailQueryNonFunctionals(unittest.TestCase):

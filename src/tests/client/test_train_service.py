@@ -5,8 +5,6 @@ from src.client.train_service import (
     TrainServiceUpdate,
     TrainServiceCancellationData,
     TrainServiceDelayData,
-    TrainServiceOnTimeData,
-    TrainServiceState,
 )
 import datetime
 
