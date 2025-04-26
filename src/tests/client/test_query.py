@@ -1,6 +1,6 @@
 import unittest
-from src.client.query import NationalRailQuery
-from src.client.train_service import TrainServiceMonitorInstruction, TrainServiceState
+from client.query import NationalRailQuery
+from client.train_service import TrainServiceMonitorInstruction, TrainServiceState
 import mock
 from tests.client.national_rail_data import setUpDelayedService, setUpOnTimeService
 

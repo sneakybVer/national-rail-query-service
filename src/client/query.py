@@ -1,8 +1,8 @@
 import logging
-from src.config.api import getNationalRailClient
-from src.client.util import retry
+from config.api import getNationalRailClient
+from client.util import retry
 import datetime
-from src.client.train_service import (
+from client.train_service import (
     TrainServiceUpdate,
     TrainServiceCancellationData,
     TrainServiceDelayData,

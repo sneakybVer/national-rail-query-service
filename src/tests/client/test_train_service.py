@@ -1,5 +1,5 @@
 import unittest
-from src.client.train_service import (
+from client.train_service import (
     TrainServiceMonitorInstruction,
     TrainServiceUpdate,
     TrainServiceCancellationData,
