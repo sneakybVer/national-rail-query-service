@@ -49,11 +49,11 @@ class NationalRailQuery(object):
         ]
 
     def _parseServiceData(self, serviceToMonitor, serviceData):
-        if serviceData.etd == TrainServiceState.CANCELLED:
+        if serviceData.etd == TrainServiceState.CANCELLED.value:
             data = TrainServiceCancellationData(cancelReason=serviceData.cancelReason)
-        elif serviceData.etd == TrainServiceState.ON_TIME:
+        elif serviceData.etd == TrainServiceState.ON_TIME.value:
             data = TrainServiceOnTimeData()
-        elif serviceData.etd == TrainServiceState.DELAYED:
+        elif serviceData.etd == TrainServiceState.DELAYED.value:
             data = TrainServiceDelayData(None, serviceData.delayReason)
         else:
             etd = datetime.datetime.strptime(serviceData.etd, "%H:%M")
