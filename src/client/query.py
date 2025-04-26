@@ -58,7 +58,7 @@ class NationalRailQuery(object):
         else:
             etd = datetime.datetime.strptime(serviceData.etd, "%H:%M")
             delay = etd - serviceToMonitor.scheduledTime
-            if delay.seconds > (180):
+            if delay.seconds > 180:
                 data = TrainServiceDelayData(delay.seconds, serviceData.delayReason)
             else:
                 data = TrainServiceOnTimeData()
