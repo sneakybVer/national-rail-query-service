@@ -1,6 +1,6 @@
 import datetime
 import pytz
-from enum import Enum
+from client.consts import TrainServiceState
 
 
 class TrainServiceMonitorInstruction(object):
@@ -24,13 +24,6 @@ class TrainServiceMonitorInstruction(object):
         now = datetime.datetime.now(pytz.timezone("Europe/London"))
         now = now.replace(tzinfo=None)
         return (self.scheduledTime - now).seconds < timeframe
-
-
-class TrainServiceState(Enum):
-    ON_TIME = "On Time"
-    DELAYED = "Delayed"
-    DELAYED_NO_ETD = "Delayed with no estimate"
-    CANCELLED = "Cancelled"
 
 
 class TrainServiceStateData(object):

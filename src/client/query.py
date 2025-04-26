@@ -8,6 +8,7 @@ from client.train_service import (
     TrainServiceDelayData,
     TrainServiceOnTimeData,
 )
+from client.consts import TrainServiceState
 
 
 class NationalRailQuery(object):
@@ -48,11 +49,11 @@ class NationalRailQuery(object):
         ]
 
     def _parseServiceData(self, serviceToMonitor, serviceData):
-        if serviceData.etd == "Cancelled":
+        if serviceData.etd == TrainServiceState.CANCELLED:
             data = TrainServiceCancellationData(cancelReason=serviceData.cancelReason)
-        elif serviceData.etd == "On time":
+        elif serviceData.etd == TrainServiceState.ON_TIME:
             data = TrainServiceOnTimeData()
-        elif serviceData.etd == "Delayed":
+        elif serviceData.etd == TrainServiceState.DELAYED:
             data = TrainServiceDelayData(None, serviceData.delayReason)
         else:
             etd = datetime.datetime.strptime(serviceData.etd, "%H:%M")
